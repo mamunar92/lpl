@@ -12,8 +12,14 @@ export default function SponsorSection() {
         </p>
         <div className="flex flex-wrap justify-center items-center gap-8">
           {/* Sponsor Logos */}
-          <div className="w-40 h-40 bg-white/10 rounded-lg flex items-center justify-center">
-            <span className="text-secondary-foreground/70">Sponsor 1</span>
+          <div className="w-40 h-40 bg-white rounded-lg flex items-center justify-center">
+            <span className="text-secondary-foreground/70">
+              <img
+                src="/sponsor/IK.png"
+                alt="IK & Associates"
+                className="w-full h-fit"
+              />
+            </span>
           </div>
           <div className="w-40 h-40 bg-white/10 rounded-lg flex items-center justify-center">
             <span className="text-secondary-foreground/70">Sponsor 2</span>

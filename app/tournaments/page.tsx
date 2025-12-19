@@ -1,4 +1,74 @@
+"use client";
+import { useState } from "react";
+
 export default function TournamentsPage() {
+  type Player = {
+    name: string;
+    tshirt?: string;
+    batting?: string;
+    bowling?: string;
+  };
+
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setSuccess(false);
+    setError("");
+
+    const formData = new FormData(e.currentTarget);
+
+    // Convert FormData to structured object
+    const payload: {
+      teamName: string;
+      organization: string;
+      captain: string;
+      mobile: string;
+      players: Player[];
+    } = {
+      teamName: formData.get("team_name") as string,
+      organization: formData.get("organization") as string,
+      captain: formData.get("captain_name") as string,
+      mobile: formData.get("mobile") as string,
+      players: [],
+    };
+
+    // Extract players
+    for (let i = 1; i <= 13; i++) {
+      const name = formData.get(`player_name_${i}`) as string | null;
+      if (!name) continue;
+
+      payload.players.push({
+        name,
+        tshirt: (formData.get(`tshirt_${i}`) as string | null) || "",
+        batting: (formData.get(`batting_${i}`) as string | null) || "",
+        bowling: (formData.get(`bowling_${i}`) as string | null) || "",
+      });
+    }
+
+    try {
+      const res = await fetch("/api/tournament", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error("Submission failed");
+
+      setSuccess(true);
+      e.currentTarget.reset();
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main>
       {/* Hero Section */}
@@ -172,7 +242,13 @@ export default function TournamentsPage() {
               </h2>
 
               <div className="bg-card border border-border rounded-xl p-8">
-                <form className="space-y-8">
+                {success && (
+                  <p className="text-green-600 font-semibold mt-4">
+                    ✅ Team registration submitted successfully!
+                  </p>
+                )}
+
+                <form className="space-y-8" onSubmit={handleSubmit}>
                   {/* Team Info */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -181,6 +257,7 @@ export default function TournamentsPage() {
                       </label>
                       <input
                         type="text"
+                        name="team_name"
                         className="w-full border border-border rounded-lg px-4 py-2 bg-background"
                         placeholder="Enter team name"
                       />
@@ -192,6 +269,7 @@ export default function TournamentsPage() {
                       </label>
                       <input
                         type="text"
+                        name="organization"
                         className="w-full border border-border rounded-lg px-4 py-2 bg-background"
                         placeholder="Organization name"
                       />
@@ -203,6 +281,7 @@ export default function TournamentsPage() {
                       </label>
                       <input
                         type="text"
+                        name="captain_name"
                         className="w-full border border-border rounded-lg px-4 py-2 bg-background"
                         placeholder="Captain or Manager name"
                       />
@@ -213,7 +292,8 @@ export default function TournamentsPage() {
                         Mobile Number
                       </label>
                       <input
-                        type="tel"
+                        type="text"
+                        name="mobile"
                         className="w-full border border-border rounded-lg px-4 py-2 bg-background"
                         placeholder="01XXXXXXXXX"
                       />
@@ -239,6 +319,7 @@ export default function TournamentsPage() {
                             <td className="p-3">
                               <input
                                 type="text"
+                                name={`player_name_${index + 1}`}
                                 placeholder="Player Name"
                                 className="w-full border border-border rounded px-2 py-1 bg-background"
                               />
@@ -246,12 +327,16 @@ export default function TournamentsPage() {
                             <td className="p-3">
                               <input
                                 type="text"
+                                name={`tshirt_${index + 1}`}
                                 placeholder="T-Shirt No"
                                 className="w-full border border-border rounded px-2 py-1 bg-background"
                               />
                             </td>
                             <td className="p-3">
-                              <select className="w-full border border-border rounded px-2 py-1 bg-background">
+                              <select
+                                className="w-full border border-border rounded px-2 py-1 bg-background"
+                                name={`batting_${index + 1}`}
+                              >
                                 <option>RHB</option>
                                 <option>LHB</option>
                               </select>
@@ -259,6 +344,7 @@ export default function TournamentsPage() {
                             <td className="p-3">
                               <input
                                 type="text"
+                                name={`bowling_${index + 1}`}
                                 className="w-full border border-border rounded px-2 py-1 bg-background"
                                 placeholder="Fast / Spin"
                               />
@@ -273,9 +359,10 @@ export default function TournamentsPage() {
                   <div className="text-center">
                     <button
                       type="submit"
-                      className="bg-primary text-primary-foreground px-10 py-3 rounded-lg font-semibold hover:bg-primary/90 transition"
+                      disabled={loading}
+                      className="bg-primary text-primary-foreground px-10 py-3 rounded-lg font-semibold hover:bg-primary/90 transition disabled:opacity-60"
                     >
-                      Submit Registration
+                      {loading ? "Submitting..." : "Submit Registration"}
                     </button>
                   </div>
                 </form>

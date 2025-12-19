@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Mail, Phone, Globe, Facebook } from "lucide-react"
+import { useState } from "react";
+import { Mail, Phone, Globe, Facebook } from "lucide-react";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -12,24 +12,48 @@ export default function ContactPage() {
     phone: "",
     organization: "",
     message: "",
-  })
-  const [submitted, setSubmitted] = useState(false)
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handle form submission (integrate with email service)
-    console.log("Form submitted:", formData)
-    setSubmitted(true)
-    setTimeout(() => {
-      setFormData({ name: "", email: "", phone: "", organization: "", message: "" })
-      setSubmitted(false)
-    }, 3000)
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        setSubmitted(true);
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          organization: "",
+          message: "",
+        });
+
+        setTimeout(() => setSubmitted(false), 3000);
+      }
+    } catch (err) {
+      console.error("Form submit failed", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <main>
@@ -37,7 +61,9 @@ export default function ContactPage() {
       <section className="bg-gradient-to-r from-primary to-secondary text-primary-foreground py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-5xl md:text-6xl font-bold mb-4">Get in Touch</h1>
-          <p className="text-xl md:text-2xl text-primary-foreground/90">Reach out to Lawyer's Premier League BD</p>
+          <p className="text-xl md:text-2xl text-primary-foreground/90">
+            Reach out to Lawyer's Premier League BD
+          </p>
         </div>
       </section>
 
@@ -47,7 +73,9 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Information */}
             <div>
-              <h2 className="text-4xl font-bold text-foreground mb-8">Contact Information</h2>
+              <h2 className="text-4xl font-bold text-foreground mb-8">
+                Contact Information
+              </h2>
 
               <div className="space-y-8">
                 {/* Email */}
@@ -58,8 +86,13 @@ export default function ContactPage() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-foreground mb-1">Email</h3>
-                    <a href="mailto:lawyerspremierleaguelpl@gmail.com" className="text-primary hover:underline">
+                    <h3 className="text-lg font-bold text-foreground mb-1">
+                      Email
+                    </h3>
+                    <a
+                      href="mailto:lawyerspremierleaguelpl@gmail.com"
+                      className="text-primary hover:underline"
+                    >
                       lawyerspremierleaguelpl@gmail.com
                     </a>
                   </div>
@@ -73,8 +106,13 @@ export default function ContactPage() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-foreground mb-1">WhatsApp</h3>
-                    <a href="https://wa.me/880130411555" className="text-secondary hover:underline">
+                    <h3 className="text-lg font-bold text-foreground mb-1">
+                      WhatsApp
+                    </h3>
+                    <a
+                      href="https://wa.me/880130411555"
+                      className="text-secondary hover:underline"
+                    >
                       +880 1304115555
                     </a>
                   </div>
@@ -88,12 +126,20 @@ export default function ContactPage() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-foreground mb-1">Website</h3>
+                    <h3 className="text-lg font-bold text-foreground mb-1">
+                      Website
+                    </h3>
                     <div className="space-y-1">
-                      <a href="http://lawyerspremierleaguebd.com" className="block text-primary hover:underline">
+                      <a
+                        href="http://lawyerspremierleaguebd.com"
+                        className="block text-primary hover:underline"
+                      >
                         lawyerspremierleaguebd.com
                       </a>
-                      <a href="http://lawyerspremierleaguebd.org" className="block text-primary hover:underline">
+                      <a
+                        href="http://lawyerspremierleaguebd.org"
+                        className="block text-primary hover:underline"
+                      >
                         lawyerspremierleaguebd.org
                       </a>
                     </div>
@@ -108,8 +154,13 @@ export default function ContactPage() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-foreground mb-1">Facebook</h3>
-                    <a href="https://www.facebook.com/lawyerspremierleaguebd" className="text-primary hover:underline">
+                    <h3 className="text-lg font-bold text-foreground mb-1">
+                      Facebook
+                    </h3>
+                    <a
+                      href="https://www.facebook.com/lawyerspremierleaguebd"
+                      className="text-primary hover:underline"
+                    >
                       Lawyer's Premier League BD
                     </a>
                   </div>
@@ -118,28 +169,35 @@ export default function ContactPage() {
 
               {/* Additional Info */}
               <div className="mt-12 bg-primary/5 border border-primary/10 rounded-lg p-6">
-                <h3 className="text-lg font-bold text-foreground mb-4">Business Hours</h3>
+                <h3 className="text-lg font-bold text-foreground mb-4">
+                  Business Hours
+                </h3>
                 <p className="text-foreground/70">
-                  Available for inquiries during standard business hours. For urgent matters, please reach out via
-                  WhatsApp.
+                  Available for inquiries during standard business hours. For
+                  urgent matters, please reach out via WhatsApp.
                 </p>
               </div>
             </div>
 
             {/* Contact Form */}
             <div>
-              <h2 className="text-4xl font-bold text-foreground mb-8">Send us a Message</h2>
+              <h2 className="text-4xl font-bold text-foreground mb-8">
+                Send us a Message
+              </h2>
 
               {submitted && (
                 <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
-                  Thank you for reaching out! We'll get back to you soon.
+                  ✅ Thank you! Your message has been sent successfully.
                 </div>
               )}
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Name */}
                 <div>
-                  <label htmlFor="name" className="block text-sm font-semibold text-foreground mb-2">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-semibold text-foreground mb-2"
+                  >
                     Full Name
                   </label>
                   <input
@@ -156,7 +214,10 @@ export default function ContactPage() {
 
                 {/* Email */}
                 <div>
-                  <label htmlFor="email" className="block text-sm font-semibold text-foreground mb-2">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-semibold text-foreground mb-2"
+                  >
                     Email Address
                   </label>
                   <input
@@ -173,7 +234,10 @@ export default function ContactPage() {
 
                 {/* Phone */}
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-semibold text-foreground mb-2">
+                  <label
+                    htmlFor="phone"
+                    className="block text-sm font-semibold text-foreground mb-2"
+                  >
                     Phone Number
                   </label>
                   <input
@@ -189,7 +253,10 @@ export default function ContactPage() {
 
                 {/* Organization */}
                 <div>
-                  <label htmlFor="organization" className="block text-sm font-semibold text-foreground mb-2">
+                  <label
+                    htmlFor="organization"
+                    className="block text-sm font-semibold text-foreground mb-2"
+                  >
                     Organization / Bar Association
                   </label>
                   <input
@@ -205,7 +272,10 @@ export default function ContactPage() {
 
                 {/* Message */}
                 <div>
-                  <label htmlFor="message" className="block text-sm font-semibold text-foreground mb-2">
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-semibold text-foreground mb-2"
+                  >
                     Message
                   </label>
                   <textarea
@@ -223,9 +293,18 @@ export default function ContactPage() {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+                  disabled={loading}
+                  className={`w-full flex items-center justify-center gap-2 py-3 rounded-lg font-semibold transition-colors
+                    ${
+                      loading
+                        ? "bg-primary/70 cursor-not-allowed"
+                        : "bg-primary hover:bg-primary/90"
+                    } text-primary-foreground`}
                 >
-                  Send Message
+                  {loading && (
+                    <span className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  )}
+                  {loading ? "Sending..." : "Send Message"}
                 </button>
               </form>
             </div>
@@ -236,7 +315,9 @@ export default function ContactPage() {
       {/* FAQ Section */}
       <section className="py-20 bg-card">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-foreground mb-12 text-center">Frequently Asked Questions</h2>
+          <h2 className="text-4xl font-bold text-foreground mb-12 text-center">
+            Frequently Asked Questions
+          </h2>
 
           <div className="space-y-6">
             {[
@@ -266,8 +347,13 @@ export default function ContactPage() {
                   "Details regarding fees and memberships vary by tournament and participation level. Please contact us directly for specific information about your interest.",
               },
             ].map((item, index) => (
-              <div key={index} className="bg-background border border-border rounded-lg p-6">
-                <h3 className="text-lg font-bold text-primary mb-3">{item.question}</h3>
+              <div
+                key={index}
+                className="bg-background border border-border rounded-lg p-6"
+              >
+                <h3 className="text-lg font-bold text-primary mb-3">
+                  {item.question}
+                </h3>
                 <p className="text-foreground/70">{item.answer}</p>
               </div>
             ))}
@@ -280,8 +366,8 @@ export default function ContactPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold mb-6">Ready to Connect?</h2>
           <p className="text-xl text-primary-foreground/90 mb-8">
-            Whether you have questions, want to join, or seek partnership opportunities, we're here to help. Reach out
-            today!
+            Whether you have questions, want to join, or seek partnership
+            opportunities, we're here to help. Reach out today!
           </p>
           <a
             href="mailto:lawyerspremierleaguelpl@gmail.com"
@@ -292,5 +378,5 @@ export default function ContactPage() {
         </div>
       </section>
     </main>
-  )
+  );
 }

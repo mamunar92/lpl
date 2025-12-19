@@ -1,28 +1,28 @@
 export default function SponsorPage() {
   const sponsors = [
     {
-      name: "[Name]",
-      logo: "/placeholder.svg",
+      name: "IK & Associates",
+      logo: "/sponsor/IK.png",
       description:
-        "Leading legal advisory firm supporting sports initiatives nationwide.",
+        "",
     },
     {
       name: "[Name]",
       logo: "/placeholder.svg",
       description:
-        "Premium automobile company promoting professional sports culture.",
+        "",
     },
     {
       name: "[Name]",
       logo: "/placeholder.svg",
       description:
-        "Top-tier insurance provider empowering national events and communities.",
+        "",
     },
     {
       name: "[Name]",
       logo: "/placeholder.svg",
       description:
-        "Innovative legal-tech platform bridging law and technology.",
+        "",
     },
   ];
 
@@ -168,9 +168,9 @@ export default function SponsorPage() {
                   <h3 className="text-xl font-bold text-primary mb-2">
                     {sponsor.name}
                   </h3>
-                  <p className="text-foreground/70 text-sm leading-relaxed">
+                  {/* <p className="text-foreground/70 text-sm leading-relaxed">
                     {sponsor.description}
-                  </p>
+                  </p> */}
                 </div>
               ))}
             </div>

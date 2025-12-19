@@ -1,15 +1,15 @@
 export default function AdvisoryPage() {
   const advisoryPanel = [
-    {
-      name: "Justice Ibtedar Hoque Ifti",
-      title: "Senior Legal Expert",
-      image: "/management/Justice Ibtedar Hoque Ifti.jpg",
-    },
-    {
-      name: "Bar. Nasir Uddin Ahmed Ashim",
-      title: "Judicial Authority",
-      image: "/placeholder.svg",
-    },
+    // {
+    //   name: "Justice Ibtedar Hoque Ifti",
+    //   title: "Senior Legal Expert",
+    //   image: "/management/Justice Ibtedar Hoque Ifti.jpg",
+    // },
+    // {
+    //   name: "Bar. Nasir Uddin Ahmed Ashim",
+    //   title: "Judicial Authority",
+    //   image: "/placeholder.svg",
+    // },
     {
       name: "Adv. Md. Mosleh Uddin Jashim",
       title: "Senior Advocate",
